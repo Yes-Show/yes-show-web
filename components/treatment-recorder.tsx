@@ -199,8 +199,8 @@ export function TreatmentRecorder() {
                         <CardContent>
                             <p>
                                 The audio recording has been successfully converted to text and is
-                                now available in the patient's treatment history. You can access it
-                                by clicking on the most recent date in the sidebar.
+                                now available in the patient&apos;s treatment history. You can
+                                access it by clicking on the most recent date in the sidebar.
                             </p>
                         </CardContent>
                         <CardFooter>

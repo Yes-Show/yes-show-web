@@ -83,7 +83,7 @@ export function TreatmentContent({ treatment }: TreatmentContentProps) {
                                 <CardHeader>
                                     <CardTitle>Treatment Transcript</CardTitle>
                                     <CardDescription>
-                                        Transcribed from the doctor's recording
+                                        Transcribed from the doctor&apos;s recording
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
