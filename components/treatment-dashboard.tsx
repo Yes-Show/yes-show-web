@@ -5,8 +5,15 @@ import { PatientSidebar } from "./patient-sidebar";
 import { TreatmentContent } from "./treatment-content";
 import { TreatmentRecorder } from "./treatment-recorder";
 
+interface Treatment {
+    id: string;
+    date: string;
+    content: string;
+    summary: Record<string, string>;
+}
+
 // Dummy data for treatments
-export const treatments = [
+export const treatments: Treatment[] = [
     {
         id: "1",
         date: "2024-05-08",
@@ -46,8 +53,8 @@ export const treatments = [
 ];
 
 export function TreatmentDashboard() {
-    const [selectedTreatment, setSelectedTreatment] = useState(treatments[0]);
-    const [isNewTreatment, setIsNewTreatment] = useState(false);
+    const [selectedTreatment, setSelectedTreatment] = useState<Treatment>(treatments[0]);
+    const [isNewTreatment, setIsNewTreatment] = useState<boolean>(false);
 
     const handleSelectTreatment = (id: string) => {
         const treatment = treatments.find((t) => t.id === id);
