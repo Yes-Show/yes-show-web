@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { FileEdit, Save } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react"
+import { FileEdit, Save } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
 import {
     Card,
     CardContent,
@@ -11,55 +11,58 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-interface TreatmentContentProps {
-    treatment: {
-        id: string;
-        date: string;
-        content: string;
-        summary: Record<string, string>;
-    };
+interface AppointmentContentProps {
+    appointment: {
+        id: string
+        date: string
+        content: string
+        summary: Record<string, string>
+    }
 }
 
-export function TreatmentContent({ treatment }: TreatmentContentProps) {
-    const [isEditing, setIsEditing] = useState(false);
-    const [content, setContent] = useState(treatment.content);
-    const [activeTab, setActiveTab] = useState("transcript");
+export function AppointmentContent({ appointment }: AppointmentContentProps) {
+    const [isEditing, setIsEditing] = useState(false)
+    const [content, setContent] = useState(appointment.content)
+    const [activeTab, setActiveTab] = useState("transcript")
 
     const handleSave = () => {
-        setIsEditing(false);
+        setIsEditing(false)
         // In a real app, you would save the changes to the server here
-    };
+    }
 
     const formatDate = (dateStr: string) => {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString("en-US", {
+        const date = new Date(dateStr)
+        return date.toLocaleDateString("ko-KR", {
             year: "numeric",
             month: "long",
             day: "numeric",
-        });
-    };
+            weekday: "short",
+        })
+    }
 
     return (
         <div className="p-6 w-full">
             <div className="mx-auto max-w-4xl">
                 <div className="mb-6 flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">Treatment Record</h1>
-                        <p className="text-muted-foreground">Date: {formatDate(treatment.date)}</p>
+                        <h1 className="text-2xl font-bold">진료 기록</h1>
+                        <p className="text-muted-foreground">
+                            날짜: {formatDate(appointment.date)}
+                        </p>
                     </div>
                     <div>
                         {isEditing ? (
                             <Button onClick={handleSave}>
                                 <Save className="mr-2 h-4 w-4" />
-                                Save Changes
+                                저장
                             </Button>
                         ) : (
                             <Button variant="outline" onClick={() => setIsEditing(true)}>
                                 <FileEdit className="mr-2 h-4 w-4" />
-                                Edit Record
+                                수정
                             </Button>
                         )}
                     </div>
@@ -67,8 +70,8 @@ export function TreatmentContent({ treatment }: TreatmentContentProps) {
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <TabsList className="mb-4">
-                        <TabsTrigger value="transcript">Transcript</TabsTrigger>
-                        <TabsTrigger value="summary">Summary</TabsTrigger>
+                        <TabsTrigger value="transcript">대화록</TabsTrigger>
+                        <TabsTrigger value="summary">요약</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="transcript">
@@ -81,10 +84,8 @@ export function TreatmentContent({ treatment }: TreatmentContentProps) {
                         ) : (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Treatment Transcript</CardTitle>
-                                    <CardDescription>
-                                        Transcribed from the doctor&apos;s recording
-                                    </CardDescription>
+                                    <CardTitle>진료 대화록</CardTitle>
+                                    <CardDescription>의사의 녹음에서 전사된 내용</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <p className="whitespace-pre-wrap">{content}</p>
@@ -95,7 +96,7 @@ export function TreatmentContent({ treatment }: TreatmentContentProps) {
                                         onClick={() => setActiveTab("summary")}
                                         className="ml-auto"
                                     >
-                                        View Summary
+                                        요약 보기
                                     </Button>
                                 </CardFooter>
                             </Card>
@@ -105,14 +106,12 @@ export function TreatmentContent({ treatment }: TreatmentContentProps) {
                     <TabsContent value="summary">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Treatment Summary</CardTitle>
-                                <CardDescription>
-                                    AI-generated summary of the treatment
-                                </CardDescription>
+                                <CardTitle>진료 요약</CardTitle>
+                                <CardDescription>AI가 생성한 진료 요약</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <dl className="space-y-4">
-                                    {Object.entries(treatment.summary).map(([key, value]) => (
+                                    {Object.entries(appointment.summary).map(([key, value]) => (
                                         <div key={key} className="grid grid-cols-4 gap-4">
                                             <dt className="col-span-1 font-medium">{key}:</dt>
                                             <dd className="col-span-3">{value}</dd>
@@ -126,7 +125,7 @@ export function TreatmentContent({ treatment }: TreatmentContentProps) {
                                     onClick={() => setActiveTab("transcript")}
                                     className="ml-auto"
                                 >
-                                    View Full Transcript
+                                    전체 대화 보기
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -134,5 +133,5 @@ export function TreatmentContent({ treatment }: TreatmentContentProps) {
                 </Tabs>
             </div>
         </div>
-    );
+    )
 }

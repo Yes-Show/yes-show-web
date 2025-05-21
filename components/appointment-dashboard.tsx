@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { PatientSidebar } from "./patient-sidebar";
-import { TreatmentContent } from "./treatment-content";
-import { TreatmentRecorder } from "./treatment-recorder";
+import { useState } from "react"
+import { PatientSidebar } from "./patient-sidebar"
+import { AppointmentContent } from "./appointment-content"
+import { AppointmentRecorder } from "./appointment-recorder"
 
-interface Treatment {
-    id: string;
-    date: string;
-    content: string;
-    summary: Record<string, string>;
+interface Appointment {
+    id: string
+    date: string
+    content: string
+    summary: Record<string, string>
 }
 
-// Dummy data for treatments
-export const treatments: Treatment[] = [
+// Dummy data for appointments
+export const appointments: Appointment[] = [
     {
         id: "1",
         date: "2024-05-08",
@@ -50,41 +50,41 @@ export const treatments: Treatment[] = [
             Medications: "None prescribed",
         },
     },
-];
+]
 
-export function TreatmentDashboard() {
-    const [selectedTreatment, setSelectedTreatment] = useState<Treatment>(treatments[0]);
-    const [isNewTreatment, setIsNewTreatment] = useState<boolean>(false);
+export function AppointmentDashboard() {
+    const [selectedAppointment, setSelectedAppointment] = useState<Appointment>(appointments[0])
+    const [isNewAppointment, setIsNewAppointment] = useState<boolean>(false)
 
-    const handleSelectTreatment = (id: string) => {
-        const treatment = treatments.find((t) => t.id === id);
-        if (treatment) {
-            setSelectedTreatment(treatment);
-            setIsNewTreatment(false);
+    const handleSelectAppointment = (id: string) => {
+        const appointment = appointments.find((t) => t.id === id)
+        if (appointment) {
+            setSelectedAppointment(appointment)
+            setIsNewAppointment(false)
         }
-    };
+    }
 
-    const handleNewTreatment = () => {
-        setIsNewTreatment(true);
-    };
+    const handleNewAppointment = () => {
+        setIsNewAppointment(true)
+    }
 
     return (
         <div className="flex flex-1 overflow-hidden">
             <div className="flex h-full w-64 min-w-64 flex-shrink-0 border-r bg-white">
                 <PatientSidebar
-                    treatments={treatments}
-                    onSelectTreatment={handleSelectTreatment}
-                    onNewTreatment={handleNewTreatment}
-                    selectedTreatmentId={isNewTreatment ? null : selectedTreatment?.id}
+                    appointments={appointments}
+                    onSelectAppointment={handleSelectAppointment}
+                    onNewAppointment={handleNewAppointment}
+                    selectedAppointmentId={isNewAppointment ? null : selectedAppointment?.id}
                 />
             </div>
             <main className="flex-1 overflow-auto bg-white">
-                {isNewTreatment ? (
-                    <TreatmentRecorder />
+                {isNewAppointment ? (
+                    <AppointmentRecorder />
                 ) : (
-                    <TreatmentContent treatment={selectedTreatment} />
+                    <AppointmentContent appointment={selectedAppointment} />
                 )}
             </main>
         </div>
-    );
+    )
 }
