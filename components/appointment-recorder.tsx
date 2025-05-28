@@ -261,36 +261,27 @@ export function AppointmentRecorder() {
 
                 {/* 메모 작성 카드 */}
                 <Card className="mb-6">
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <div>
-                            <CardTitle>진료 메모</CardTitle>
-                            <CardDescription>진료 중 작성할 메모</CardDescription>
-                        </div>
-                        {isEditingMemo ? (
-                            <Button onClick={() => setIsEditingMemo(false)}>
-                                <Save className="mr-2 h-4 w-4" />
-                                저장
-                            </Button>
-                        ) : (
-                            <Button variant="outline" onClick={() => setIsEditingMemo(true)}>
-                                <FileEdit className="mr-2 h-4 w-4" />
-                                수정
-                            </Button>
-                        )}
+                    <CardHeader>
+                        <CardTitle>진료 메모</CardTitle>
+                        <CardDescription>진료 중 작성할 메모</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        {isEditingMemo ? (
-                            <Textarea
-                                value={memo}
-                                onChange={(e) => setMemo(e.target.value)}
-                                className="min-h-[200px] w-full"
-                                placeholder="진료 중 작성할 메모를 입력하세요..."
-                            />
-                        ) : (
-                            <p className="whitespace-pre-wrap">
-                                {memo || "아직 작성된 메모가 없습니다."}
-                            </p>
-                        )}
+                    <CardContent className="space-y-4">
+                        <Textarea
+                            value={memo}
+                            onChange={(e) => setMemo(e.target.value)}
+                            className="min-h-[200px] w-full"
+                            placeholder="진료 중 작성할 메모를 입력하세요..."
+                        />
+                        <Button
+                            onClick={() => {
+                                // TODO: 메모 저장 로직 추가
+                                alert("메모가 저장되었습니다.")
+                            }}
+                            className="w-full"
+                        >
+                            <Save className="mr-2 h-4 w-4" />
+                            작성 완료
+                        </Button>
                     </CardContent>
                 </Card>
 

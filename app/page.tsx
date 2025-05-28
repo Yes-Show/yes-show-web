@@ -1,21 +1,53 @@
-import { Search } from "lucide-react"
-import { AppointmentDashboard } from "@/components/appointment-dashboard"
-import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { UserRound, Stethoscope } from "lucide-react"
+import Link from "next/link"
 
 export default function Home() {
     return (
-        <div className="flex h-screen flex-col">
-            <header className="border-b px-6 py-4">
-                <div className="relative mx-auto max-w-4xl">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                        className="w-full rounded-md border pl-10 pr-4 py-2"
-                        placeholder="환자 검색..."
-                        type="search"
-                    />
+        <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-50">
+            <div className="max-w-4xl w-full space-y-8">
+                <div className="text-center mb-12">
+                    <h1 className="text-4xl font-bold mb-4">의료진 포털</h1>
+                    <p className="text-gray-600">역할을 선택해주세요</p>
                 </div>
-            </header>
-            <AppointmentDashboard />
-        </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <Link href="/doctor" className="w-full">
+                        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <Stethoscope className="h-6 w-6" />
+                                    의사
+                                </CardTitle>
+                                <CardDescription>환자 진료 및 상담 기록 관리</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-sm text-gray-600">
+                                    진료 기록, 상담 내용 관리, 처방 관리
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
+                    <Link href="/nurse" className="w-full">
+                        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <UserRound className="h-6 w-6" />
+                                    간호사
+                                </CardTitle>
+                                <CardDescription>환자 예약 및 관리</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-sm text-gray-600">
+                                    예약 관리, 리마인더 발송, 환자 정보 관리
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </Link>
+                </div>
+            </div>
+        </main>
     )
 }
