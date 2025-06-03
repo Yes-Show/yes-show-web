@@ -5,6 +5,7 @@ import { PatientSidebar } from "./patient-sidebar"
 import { AppointmentContent } from "./appointment-content"
 import { AppointmentRecorder } from "./appointment-recorder"
 import { AppointmentType } from "@/types/appointmentType"
+import { PatientType } from "@/types/patientType"
 
 // Dummy data for appointments
 export const appointments: AppointmentType[] = [
@@ -55,7 +56,11 @@ export const appointments: AppointmentType[] = [
     },
 ]
 
-export function AppointmentDashboard() {
+interface AppointmentDashboardProps {
+    patient: PatientType
+}
+
+export function AppointmentDashboard({ patient }: AppointmentDashboardProps) {
     const [selectedAppointment, setSelectedAppointment] = useState<AppointmentType>(appointments[0])
     const [isNewAppointment, setIsNewAppointment] = useState<boolean>(false)
 
@@ -76,19 +81,7 @@ export function AppointmentDashboard() {
             <div className="flex h-full w-64 min-w-64 flex-shrink-0 border-r bg-white">
                 <PatientSidebar
                     appointments={appointments}
-                    patient={{
-                        patientId: 1,
-                        name: "홍길동",
-                        gender: 1,
-                        birthday: "1990-01-01",
-                        neighbourhood: "서울",
-                        phone: "010-1234-5678",
-                        email: "hong@example.com",
-                        emergencyContact: "홍부모",
-                        emergencyPhone: "010-8765-4321",
-                        bloodType: "A",
-                        createdAt: "2024-01-01",
-                    }}
+                    patient={patient}
                     onSelectAppointment={handleSelectAppointment}
                     onNewAppointment={handleNewAppointment}
                     selectedAppointmentId={
