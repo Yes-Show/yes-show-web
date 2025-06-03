@@ -6,7 +6,7 @@ import { getPatientInfoByName } from "@/lib/apis/patientApi"
 import { PatientType } from "@/types/patientType"
 import { toast } from "sonner"
 import { Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { PatientList } from "@/components/patient-list"
 
 export default function DoctorPage() {
     const [name, setName] = useState("")
@@ -52,7 +52,7 @@ export default function DoctorPage() {
                     </form>
                 </div>
             </header>
-            {patient && <AppointmentDashboard patient={patient} />}
+            {patient ? <AppointmentDashboard patient={patient} /> : <PatientList />}
         </div>
     )
 }

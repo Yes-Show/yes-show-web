@@ -4,8 +4,15 @@ import { api } from "./apiConfig"
 export const getAppointmentsInfoByPatientId = async (
     patientId: number
 ): Promise<AppointmentType[]> => {
-    const res = await api.get<AppointmentType[]>(`/appointment/patient/${patientId}`) // TODO: 백엔드 API 뚫리면 수정
-    return res.data
+    try {
+        const response = await api.get<AppointmentType[]>(`/appointment/patient/${patientId}`)
+        return response.data
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error("진료 내역을 가져오는데 실패했습니다.")
+        }
+        throw error
+    }
 }
 
 export const addAppointment = async (patientId: number): Promise<AppointmentType> => {
