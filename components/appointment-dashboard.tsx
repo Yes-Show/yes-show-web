@@ -6,30 +6,18 @@ import { AppointmentContent } from "./appointment-content"
 import { AppointmentRecorder } from "./appointment-recorder"
 import { AppointmentType } from "@/types/appointmentType"
 import { PatientType } from "@/types/patientType"
-import { getAppointmentsInfoByPatientId } from "@/lib/apis/appointmentApi"
+import { getAppointmentsInfoByPatientId, addAppointment } from "@/lib/apis/appointmentApi"
 import { toast } from "sonner"
-
-// 더미 데이터 (주석 처리)
-/*
-export const appointments: AppointmentType[] = [
-    {
-        appointmentId: 1,
-        patientId: 1,
-        memo: "요추 4-5번 추간판탈출증. 좌측 하지 방사통. VAS 7/10. MRI 상 탈출증상. 신경차단술 시행. 물리치료 2주일. 진통제 처방.",
-        script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 요즘 허리가 너무 아파서요 특히 왼쪽 다리가 쭉 내려가면서 아파요 얼마나 아프신가요? 10점 만점에 7점 정도요 일상생활에 지장이 있으신가요? 네 계단 오르내리기가 힘들고 장시간 앉아있기도 힘들어요 언제부터 아프셨나요? 2주일 전부터 시작됐어요 갑자기 시작됐나요? 네 그냥 갑자기 아파지기 시작했어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 MRI를 찍어보니 요추 4-5번 추간판탈출증이 있네요 신경차단술을 시행하고 물리치료를 받으시는 게 좋을 것 같습니다 네 알겠습니다 진통제도 처방해드릴게요 2주일 후에 다시 한번 봐볼게요 네 감사합니다",
-        summary: JSON.stringify({
-            "주요 증상": "요추 4-5번 추간판탈출증, 좌측 하지 방사통",
-            진단: "요추 4-5번 추간판탈출증",
-            "처방 약물": "진통제",
-            "생활 지침": "물리치료 2주일",
-            "후속 조치": "신경차단술 시행, 2주일 후 재방문",
-        }),
-        noShow: false,
-        appointmentDate: "2024-05-08",
-    },
-    // ... 나머지 더미 데이터
-]
-*/
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface AppointmentDashboardProps {
     patient: PatientType
@@ -40,6 +28,7 @@ export function AppointmentDashboard({ patient }: AppointmentDashboardProps) {
     const [selectedAppointment, setSelectedAppointment] = useState<AppointmentType | null>(null)
     const [isNewAppointment, setIsNewAppointment] = useState<boolean>(false)
     const [loading, setLoading] = useState(true)
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false)
 
     useEffect(() => {
         const fetchAppointments = async () => {
@@ -70,7 +59,50 @@ export function AppointmentDashboard({ patient }: AppointmentDashboardProps) {
     }
 
     const handleNewAppointment = () => {
-        setIsNewAppointment(true)
+        setShowConfirmDialog(true)
+    }
+
+    const confirmNewAppointment = async () => {
+        setShowConfirmDialog(false)
+        try {
+            const newAppointment = await addAppointment(patient.patientId)
+            setAppointments((prev) => [newAppointment, ...prev])
+            setSelectedAppointment(newAppointment)
+            setIsNewAppointment(true)
+            toast.success("새 진료가 추가되었습니다.")
+        } catch (error) {
+            toast.error(
+                error instanceof Error ? error.message : "새 진료를 추가하는데 실패했습니다."
+            )
+        }
+    }
+
+    const handleUploadComplete = async () => {
+        if (!selectedAppointment) return
+
+        try {
+            const updatedAppointments = await getAppointmentsInfoByPatientId(patient.patientId)
+            setAppointments(updatedAppointments)
+
+            const newlyAddedAppointment = updatedAppointments.find(
+                (a) => a.appointmentId === selectedAppointment.appointmentId
+            )
+
+            if (newlyAddedAppointment) {
+                setSelectedAppointment(newlyAddedAppointment)
+            } else {
+                // 만약 방금 추가한 진료가 목록에 없다면, 목록의 첫번째 항목을 선택
+                setSelectedAppointment(updatedAppointments[0] || null)
+            }
+
+            setIsNewAppointment(false)
+        } catch (error) {
+            toast.error(
+                error instanceof Error ? error.message : "진료 내역을 다시 불러오는데 실패했습니다."
+            )
+            // 에러가 발생하더라도 녹음 화면은 닫습니다.
+            setIsNewAppointment(false)
+        }
     }
 
     if (loading) {
@@ -95,8 +127,14 @@ export function AppointmentDashboard({ patient }: AppointmentDashboardProps) {
                 />
             </div>
             <main className="flex-1 overflow-auto bg-white">
-                {isNewAppointment ? (
-                    <AppointmentRecorder />
+                {isNewAppointment && selectedAppointment ? (
+                    <AppointmentRecorder
+                        newAppointment={selectedAppointment}
+                        previousAppointments={appointments.filter(
+                            (a) => a.appointmentId !== selectedAppointment.appointmentId
+                        )}
+                        onUploadComplete={handleUploadComplete}
+                    />
                 ) : selectedAppointment ? (
                     <AppointmentContent {...selectedAppointment} />
                 ) : (
@@ -105,6 +143,18 @@ export function AppointmentDashboard({ patient }: AppointmentDashboardProps) {
                     </div>
                 )}
             </main>
+            <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>새 진료 추가</AlertDialogTitle>
+                        <AlertDialogDescription>새 진료를 추가하시겠습니까?</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>취소</AlertDialogCancel>
+                        <AlertDialogAction onClick={confirmNewAppointment}>확인</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     )
 }

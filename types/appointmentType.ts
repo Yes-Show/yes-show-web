@@ -6,4 +6,5 @@ export interface AppointmentType {
     summary: string
     noShow: boolean
     appointmentDate: string
+    appointmentTime: string
 }

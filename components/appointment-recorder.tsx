@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Mic, MicOff, Upload, FileEdit, Save } from "lucide-react"
+import { Mic, Upload, FileEdit } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -15,25 +15,21 @@ import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Textarea } from "@/components/ui/textarea"
 import { AppointmentType } from "@/types/appointmentType"
+import { parseSummary } from "@/lib/utils/summaryParser"
+import { addMemo, addRecording } from "@/lib/apis/appointmentApi"
+import { toast } from "sonner"
 
-// 임시로 최근 진료 데이터 사용
-const lastAppointment: AppointmentType = {
-    appointmentId: 1,
-    patientId: 1,
-    memo: "요추 4-5번 추간판탈출증. 좌측 하지 방사통. VAS 7/10. MRI 상 탈출증상. 신경차단술 시행. 물리치료 2주일. 진통제 처방.",
-    script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 요즘 허리가 너무 아파서요 특히 왼쪽 다리가 쭉 내려가면서 아파요 얼마나 아프신가요? 10점 만점에 7점 정도요 일상생활에 지장이 있으신가요? 네 계단 오르내리기가 힘들고 장시간 앉아있기도 힘들어요 언제부터 아프셨나요? 2주일 전부터 시작됐어요 갑자기 시작됐나요? 네 그냥 갑자기 아파지기 시작했어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 MRI를 찍어보니 요추 4-5번 추간판탈출증이 있네요 신경차단술을 시행하고 물리치료를 받으시는 게 좋을 것 같습니다 네 알겠습니다 진통제도 처방해드릴게요 2주일 후에 다시 한번 봐볼게요 네 감사합니다",
-    summary: JSON.stringify({
-        "주요 증상": "요추 4-5번 추간판탈출증, 좌측 하지 방사통",
-        진단: "요추 4-5번 추간판탈출증",
-        "처방 약물": "진통제",
-        "생활 지침": "물리치료 2주일",
-        "후속 조치": "신경차단술 시행, 2주일 후 재방문",
-    }),
-    noShow: false,
-    appointmentDate: "2024-05-08",
+interface AppointmentRecorderProps {
+    newAppointment: AppointmentType
+    previousAppointments: AppointmentType[]
+    onUploadComplete: () => void
 }
 
-export function AppointmentRecorder() {
+export function AppointmentRecorder({
+    newAppointment,
+    previousAppointments,
+    onUploadComplete,
+}: AppointmentRecorderProps) {
     const [isRecording, setIsRecording] = useState(false)
     const [recordingTime, setRecordingTime] = useState(0)
     const [isUploading, setIsUploading] = useState(false)
@@ -43,11 +39,20 @@ export function AppointmentRecorder() {
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
     const [memo, setMemo] = useState("")
     const [isEditingMemo, setIsEditingMemo] = useState(false)
+    const [isSaving, setIsSaving] = useState(false)
 
     const mediaRecorderRef = useRef<MediaRecorder | null>(null)
     const audioChunksRef = useRef<Blob[]>([])
     const timerIntervalRef = useRef<NodeJS.Timeout | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
+
+    const lastAppointment =
+        previousAppointments.length > 0
+            ? [...previousAppointments].sort(
+                  (a, b) =>
+                      new Date(b.appointmentDate).getTime() - new Date(a.appointmentDate).getTime()
+              )[0]
+            : null
 
     const startRecording = async () => {
         try {
@@ -95,33 +100,44 @@ export function AppointmentRecorder() {
         }
     }
 
-    // TODO: 서버에 업로드 하는 로직 추가
-    const handleFileUpload = () => {
+    const handleFileUpload = async () => {
         if (!audioBlob) {
-            alert("녹음된 파일이 없습니다.")
+            toast.error("업로드할 오디오 파일이 없습니다.")
+            return
+        }
+        if (!newAppointment) {
+            toast.error("진료 정보가 없습니다.")
             return
         }
 
         setIsUploading(true)
+        setUploadProgress(0)
 
-        // 실제 서버 업로드 대신 시뮬레이션
-        const uploadInterval = setInterval(() => {
-            setUploadProgress((prev) => {
-                if (prev >= 100) {
-                    clearInterval(uploadInterval)
-                    setIsUploading(false)
-                    setIsProcessing(true)
+        try {
+            const onUploadProgress = (progressEvent: any) => {
+                const percentCompleted = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                )
+                setUploadProgress(percentCompleted)
+            }
 
-                    // 처리 시뮬레이션
-                    setTimeout(() => {
-                        setIsProcessing(false)
-                        setUploadComplete(true)
-                    }, 2000)
-                    return 100
-                }
-                return prev + 10
-            })
-        }, 300)
+            await addRecording(newAppointment.appointmentId, audioBlob, onUploadProgress)
+
+            setIsUploading(false)
+            setIsProcessing(true)
+
+            // 서버 측 처리 시뮬레이션을 위한 지연
+            setTimeout(() => {
+                setIsProcessing(false)
+                setUploadComplete(true)
+                toast.success("파일 업로드 및 처리가 완료되었습니다.")
+                onUploadComplete()
+            }, 2000) // 2초 지연
+        } catch (error) {
+            setIsUploading(false)
+            setUploadProgress(0)
+            toast.error(error instanceof Error ? error.message : "파일 업로드에 실패했습니다.")
+        }
     }
 
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,9 +163,9 @@ export function AppointmentRecorder() {
     }
 
     const formatTime = (seconds: number) => {
-        const mins = Math.floor(seconds / 60)
-        const secs = seconds % 60
-        return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
+        const minutes = Math.floor(seconds / 60)
+        const remainingSeconds = seconds % 60
+        return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`
     }
 
     const formatDate = (dateStr: string) => {
@@ -162,7 +178,25 @@ export function AppointmentRecorder() {
         })
     }
 
-    const summary = JSON.parse(lastAppointment.summary)
+    const summary = lastAppointment ? parseSummary(lastAppointment.summary) : null
+
+    const handleSaveMemo = async () => {
+        if (!memo.trim()) {
+            toast.error("메모를 입력해주세요.")
+            return
+        }
+
+        setIsSaving(true)
+        try {
+            await addMemo(newAppointment.appointmentId, memo)
+            toast.success("메모가 저장되었습니다.")
+            setIsEditingMemo(false)
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : "메모 저장에 실패했습니다.")
+        } finally {
+            setIsSaving(false)
+        }
+    }
 
     return (
         <div className="p-6 w-full">
@@ -198,112 +232,101 @@ export function AppointmentRecorder() {
 
                         {isProcessing && (
                             <Alert>
-                                <AlertDescription className="flex items-center justify-center">
-                                    <svg className="mr-2 h-4 w-4 animate-spin" viewBox="0 0 24 24">
-                                        <circle
-                                            className="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth="4"
-                                            fill="none"
-                                        ></circle>
-                                        <path
-                                            className="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                        ></path>
-                                    </svg>
-                                    오디오를 텍스트로 변환 중입니다. 잠시만 기다려주세요...
+                                <AlertDescription>
+                                    오디오 파일을 처리 중입니다. 잠시만 기다려주세요...
                                 </AlertDescription>
                             </Alert>
                         )}
 
                         {uploadComplete && (
-                            <Alert className="bg-green-50 dark:bg-green-900/20">
-                                <AlertDescription className="text-green-800 dark:text-green-300">
-                                    업로드 완료! 진료 기록이 성공적으로 처리되었습니다.
+                            <Alert variant="default" className="bg-green-100">
+                                <AlertDescription>
+                                    업로드 및 처리가 완료되었습니다.
                                 </AlertDescription>
                             </Alert>
                         )}
                     </CardContent>
-                    <CardFooter className="flex justify-between space-x-4">
+                    <CardFooter className="flex justify-center gap-4">
                         <Button
-                            variant={isRecording ? "destructive" : "default"}
-                            className="flex-1"
-                            onClick={isRecording ? stopRecording : startRecording}
-                            disabled={isUploading || isProcessing || uploadComplete}
+                            size="lg"
+                            className="w-40"
+                            onClick={startRecording}
+                            disabled={isRecording}
                         >
-                            {isRecording ? (
-                                <>
-                                    <MicOff className="mr-2 h-4 w-4" />
-                                    녹음 종료
-                                </>
-                            ) : (
-                                <>
-                                    <Mic className="mr-2 h-4 w-4" />
-                                    녹음 시작
-                                </>
-                            )}
+                            <Mic className="mr-2 h-5 w-5" />
+                            녹음 시작
                         </Button>
                         <Button
-                            variant="outline"
-                            className="flex-1"
+                            size="lg"
+                            className="w-40"
                             onClick={triggerFileSelect}
-                            disabled={isRecording || isUploading || isProcessing || uploadComplete}
+                            variant="secondary"
                         >
-                            <Upload className="mr-2 h-4 w-4" />
-                            녹음 업로드
+                            <Upload className="mr-2 h-5 w-5" />
+                            파일 업로드
                         </Button>
                     </CardFooter>
                 </Card>
 
-                {/* 메모 작성 카드 */}
                 <Card className="mb-6">
                     <CardHeader>
-                        <CardTitle>진료 메모</CardTitle>
-                        <CardDescription>진료 중 작성할 메모</CardDescription>
+                        <CardTitle>의사 메모</CardTitle>
+                        <CardDescription>진료 중 작성된 메모</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                        <Textarea
-                            value={memo}
-                            onChange={(e) => setMemo(e.target.value)}
-                            className="min-h-[200px] w-full"
-                            placeholder="진료 중 작성할 메모를 입력하세요..."
-                        />
-                        <Button
-                            onClick={() => {
-                                // TODO: 메모 저장 로직 추가
-                                alert("메모가 저장되었습니다.")
-                            }}
-                            className="w-full"
-                        >
-                            <Save className="mr-2 h-4 w-4" />
-                            작성 완료
-                        </Button>
+                    <CardContent>
+                        {isEditingMemo ? (
+                            <div className="space-y-4">
+                                <Textarea
+                                    value={memo}
+                                    onChange={(e) => setMemo(e.target.value)}
+                                    placeholder="메모를 입력하세요..."
+                                    className="min-h-[200px]"
+                                />
+                                <div className="flex justify-end space-x-2">
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => setIsEditingMemo(false)}
+                                        disabled={isSaving}
+                                    >
+                                        취소
+                                    </Button>
+                                    <Button onClick={handleSaveMemo} disabled={isSaving}>
+                                        {isSaving ? "저장 중..." : "저장"}
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <p className="whitespace-pre-wrap">{memo || "메모가 없습니다."}</p>
+                                <Button variant="outline" onClick={() => setIsEditingMemo(true)}>
+                                    <FileEdit className="mr-2 h-4 w-4" />
+                                    메모 작성
+                                </Button>
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
 
-                {/* 최근 진료 보고서 카드 */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>최근 진료 보고서</CardTitle>
-                        <CardDescription>
-                            {formatDate(lastAppointment.appointmentDate)}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <dl className="space-y-4">
-                            {Object.entries(summary).map(([key, value]) => (
-                                <div key={key} className="grid grid-cols-4 gap-4">
-                                    <dt className="col-span-1 font-medium">{key}:</dt>
-                                    <dd className="col-span-3">{String(value)}</dd>
-                                </div>
-                            ))}
-                        </dl>
-                    </CardContent>
-                </Card>
+                {summary && lastAppointment && (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>최근 진료 보고서</CardTitle>
+                            <CardDescription>
+                                {formatDate(lastAppointment.appointmentDate)}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <dl className="space-y-4">
+                                {Object.entries(summary).map(([key, value]) => (
+                                    <div key={key} className="grid grid-cols-4 gap-4">
+                                        <dt className="col-span-1 font-medium">{key}:</dt>
+                                        <dd className="col-span-3">{String(value)}</dd>
+                                    </div>
+                                ))}
+                            </dl>
+                        </CardContent>
+                    </Card>
+                )}
 
                 <input
                     type="file"

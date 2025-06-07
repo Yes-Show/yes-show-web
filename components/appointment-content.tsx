@@ -13,6 +13,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { AppointmentType } from "@/types/appointmentType"
+import { parseSummary } from "@/lib/utils/summaryParser"
 
 export function AppointmentContent(appointment: AppointmentType) {
     const [isEditing, setIsEditing] = useState(false)
@@ -34,7 +35,7 @@ export function AppointmentContent(appointment: AppointmentType) {
         })
     }
 
-    const summary = appointment.summary ? JSON.parse(appointment.summary) : {}
+    const summary = parseSummary(appointment.summary)
 
     return (
         <div className="p-6 w-full">

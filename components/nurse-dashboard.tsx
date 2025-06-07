@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog"
 import { toast, Toaster } from "sonner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { parseSummary } from "@/lib/utils/summaryParser"
 
 // 임시 데이터
 const mockAppointments: (AppointmentType & {
@@ -37,13 +38,8 @@ const mockAppointments: (AppointmentType & {
         patientName: "김철수",
         memo: "요추 4-5번 추간판탈출증. 좌측 하지 방사통. VAS 7/10. MRI 상 탈출증상. 신경차단술 시행. 물리치료 2주일. 진통제 처방.",
         script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 요즘 허리가 너무 아파서요 특히 왼쪽 다리가 쭉 내려가면서 아파요 얼마나 아프신가요? 10점 만점에 7점 정도요 일상생활에 지장이 있으신가요? 네 계단 오르내리기가 힘들고 장시간 앉아있기도 힘들어요 언제부터 아프셨나요? 2주일 전부터 시작됐어요 갑자기 시작됐나요? 네 그냥 갑자기 아파지기 시작했어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 MRI를 찍어보니 요추 4-5번 추간판탈출증이 있네요 신경차단술을 시행하고 물리치료를 받으시는 게 좋을 것 같습니다 네 알겠습니다 진통제도 처방해드릴게요 2주일 후에 다시 한번 봐볼게요 네 감사합니다",
-        summary: JSON.stringify({
-            "주요 증상": "요추 4-5번 추간판탈출증, 좌측 하지 방사통",
-            진단: "요추 4-5번 추간판탈출증",
-            "처방 약물": "진통제",
-            "생활 지침": "물리치료 2주일",
-            "후속 조치": "신경차단술 시행, 2주일 후 재방문",
-        }),
+        summary:
+            "- 증상: 허리 통증으로 인해 활동에 제한이 있으며, 특히 아침에 시작되는 통증이 심합니다. 엉덩이와 허벅지까지 당기는 느낌과 쑤시는 듯한 통증이 있으며, 앉아 있을 때 허리가 뻐근하고 불편함을 느낍니다. 최근 활동량이 줄면서 체중이 증가하여 허리 통증이 심해졌습니다.\n- 진단: 허리 통증의 원인은 근육 및 신경계의 불균형으로 추정되며, 디스크 탈출이 아닌 다른 원인(관절염, 근막통증증후군 등)이 의심됩니다.\n- 치료: 도수치료, 근막 유착 해소, 신경 재교육 운동, 체형 교정, 스트레칭, 생활 습관 개선을 통해 통증을 완화하고 기능적 움직임을 회복합니다.\n- 특이사항: 환자는 척추측만증, 관절질환 오십견, 소아청소년 대상 맞춤 솔루션의 필요성을 인지하고 있습니다.\n- 환자 반응: 환자는 통증 완화와 기능 회복에 대한 기대감을 가지고 있으며, 치료 과정에 대한 적극적인 참여를 보여주고 있습니다.",
         noShow: false,
         appointmentDate: "2024-03-20",
         appointmentTime: "14:30",
@@ -207,30 +203,15 @@ function AppointmentTable({ appointments }: { appointments: typeof mockAppointme
                                                         진료 정보
                                                     </h3>
                                                     <div className="space-y-2">
-                                                        <p>
-                                                            주요 증상:{" "}
-                                                            {
-                                                                JSON.parse(
-                                                                    selectedAppointment.summary
-                                                                )["주요 증상"]
-                                                            }
-                                                        </p>
-                                                        <p>
-                                                            진단:{" "}
-                                                            {
-                                                                JSON.parse(
-                                                                    selectedAppointment.summary
-                                                                ).진단
-                                                            }
-                                                        </p>
-                                                        <p>
-                                                            처방 약물:{" "}
-                                                            {
-                                                                JSON.parse(
-                                                                    selectedAppointment.summary
-                                                                )["처방 약물"]
-                                                            }
-                                                        </p>
+                                                        {Object.entries(
+                                                            parseSummary(
+                                                                selectedAppointment.summary
+                                                            )
+                                                        ).map(([key, value]) => (
+                                                            <p key={key}>
+                                                                {key}: {value}
+                                                            </p>
+                                                        ))}
                                                     </div>
                                                 </div>
                                                 <div className="col-span-2">
@@ -349,15 +330,15 @@ export function NurseDashboard() {
                             </div>
                             <div>
                                 <h3 className="font-semibold">진료 정보</h3>
-                                <p>
-                                    주요 증상:{" "}
-                                    {JSON.parse(selectedAppointment.summary)["주요 증상"]}
-                                </p>
-                                <p>진단: {JSON.parse(selectedAppointment.summary).진단}</p>
-                                <p>
-                                    처방 약물:{" "}
-                                    {JSON.parse(selectedAppointment.summary)["처방 약물"]}
-                                </p>
+                                <div className="space-y-2">
+                                    {Object.entries(parseSummary(selectedAppointment.summary)).map(
+                                        ([key, value]) => (
+                                            <p key={key}>
+                                                {key}: {value}
+                                            </p>
+                                        )
+                                    )}
+                                </div>
                             </div>
                             <div>
                                 <h3 className="font-semibold">리마인더 정보</h3>
