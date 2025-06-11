@@ -65,7 +65,118 @@ const mockAppointments: (AppointmentType & {
         reminderCount: 1,
         lastReminderReceived: false,
     },
-    // 더 많은 임시 데이터 추가 가능
+    {
+        appointmentId: 3,
+        patientId: 3,
+        patientName: "박지민",
+        memo: "요추 추간판 탈출증 의심. MRI 촬영 필요. 통증 부위: L4-L5, 우측 방사통. VAS 6-7/10. 신경학적 검사에서 우측 SLR test 양성.",
+        script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 요즘 허리가 너무 아파서요 특히 오른쪽 다리가 쭉 내려가면서 아파요 얼마나 아프신가요? 10점 만점에 6-7점 정도요 일상생활에 지장이 있으신가요? 네 계단 오르내리기가 힘들고 장시간 앉아있기도 힘들어요 언제부터 아프셨나요? 2주일 전부터 시작됐어요 갑자기 시작됐나요? 네 그냥 갑자기 아파지기 시작했어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 MRI를 찍어보니 요추 4-5번 추간판탈출증이 의심됩니다. MRI 촬영을 통해 정확한 진단을 내릴 예정입니다.",
+        summary:
+            "- 증상: 허리 통증으로 인해 활동에 제한이 있으며, 특히 오른쪽 다리로 방사되는 통증이 심합니다. VAS 6-7/10 정도의 통증이 있으며, 움직임 시 8-9/10까지 증가합니다.\n- 진단: 요추 추간판 탈출증이 의심되며, MRI 촬영을 통해 정확한 진단이 필요합니다.\n- 치료: MRI 결과에 따라 신경차단술 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 SLR test가 양성이며, 신경학적 검사에서 이상 소견이 있습니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
+        noShow: false,
+        appointmentDate: "2025-06-12",
+        appointmentTime: "09:00",
+        reminderCount: 1,
+        lastReminderReceived: true,
+    },
+    {
+        appointmentId: 4,
+        patientId: 4,
+        patientName: "최수진",
+        memo: "경추 추간판 탈출증 의심. 경추 MRI 촬영 필요. 통증 부위: C5-C6, 우측 방사통. VAS 5-6/10. 신경학적 검사에서 우측 Spurling test 양성.",
+        script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 목이 너무 아파서 고개를 돌리기도 힘들어요 얼마나 아프신가요? 10점 만점에 5-6점 정도요 일상생활에 지장이 있으신가요? 네 고개를 돌리기가 힘들고 팔이 저려요 언제부터 아프셨나요? 일주일 전부터 시작됐어요 갑자기 시작됐나요? 네 아침에 일어나니 목이 뻐근하고 아파서 고개를 돌릴 수가 없었어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 경추 MRI를 찍어보니 경추 5-6번 추간판탈출증이 의심됩니다. 경추 MRI 촬영을 통해 정확한 진단을 내릴 예정입니다.",
+        summary:
+            "- 증상: 경부 통증으로 인해 활동에 제한이 있으며, 특히 우측 상지로 방사되는 통증이 심합니다. VAS 5-6/10 정도의 통증이 있으며, 경부 회전 시 7-8/10까지 증가합니다.\n- 진단: 경추 추간판 탈출증이 의심되며, 경추 MRI 촬영을 통해 정확한 진단이 필요합니다.\n- 치료: MRI 결과에 따라 신경차단술 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 Spurling test가 양성이며, 신경학적 검사에서 이상 소견이 있습니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
+        noShow: false,
+        appointmentDate: "2025-06-12",
+        appointmentTime: "10:00",
+        reminderCount: 1,
+        lastReminderReceived: true,
+    },
+    {
+        appointmentId: 5,
+        patientId: 5,
+        patientName: "정민수",
+        memo: "오십견 의심. 초음파 검사 필요. 통증 부위: 우측 견관절, 야간통 동반. VAS 7-8/10. 신체검사에서 우측 견관절 외전 제한, 내회전 제한.",
+        script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 오른쪽 어깨가 너무 아파서 팔을 들 수가 없어요 얼마나 아프신가요? 10점 만점에 7-8점 정도요 일상생활에 지장이 있으신가요? 네 팔을 들 수가 없고 야간에 통증이 심해요 언제부터 아프셨나요? 3주일 전부터 시작됐어요 갑자기 시작됐나요? 네 처음에는 그냥 조금 불편한 정도였는데 점점 심해졌어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 초음파 검사를 해보니 오십견이 의심됩니다. 초음파 검사를 통해 정확한 진단을 내릴 예정입니다.",
+        summary:
+            "- 증상: 우측 견관절 통증으로 인해 활동에 제한이 있으며, 특히 야간통이 심합니다. VAS 7-8/10 정도의 통증이 있으며, 상지 거상 시 9-10/10까지 증가합니다.\n- 진단: 오십견이 의심되며, 초음파 검사를 통해 정확한 진단이 필요합니다.\n- 치료: 초음파 결과에 따라 관절 내 주사 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 견관절의 외전 및 내회전 제한이 있으며, 야간통을 동반합니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
+        noShow: false,
+        appointmentDate: "2025-06-12",
+        appointmentTime: "11:00",
+        reminderCount: 1,
+        lastReminderReceived: true,
+    },
+    {
+        appointmentId: 6,
+        patientId: 6,
+        patientName: "강지원",
+        memo: "퇴행성 관절염 의심. X-ray 촬영 필요. 통증 부위: 우측 슬관절, 계단 보행 시 통증 악화. VAS 6-7/10. 신체검사에서 우측 슬관절 압통, 관절음 동반.",
+        script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 오른쪽 무릎이 너무 아파서 계단을 오르내리기가 힘들어요 얼마나 아프신가요? 10점 만점에 6-7점 정도요 일상생활에 지장이 있으신가요? 네 계단을 오르내리기가 힘들고 무릎에서 소리가 나요 언제부터 아프셨나요? 1달 전부터 시작됐어요 갑자기 시작됐나요? 네 처음에는 그냥 조금 불편한 정도였는데 점점 심해졌어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 X-ray를 찍어보니 퇴행성 관절염이 의심됩니다. X-ray 촬영을 통해 정확한 진단을 내릴 예정입니다.",
+        summary:
+            "- 증상: 우측 슬관절 통증으로 인해 활동에 제한이 있으며, 특히 계단 보행 시 통증이 악화됩니다. VAS 6-7/10 정도의 통증이 있으며, 계단 보행 시 8-9/10까지 증가합니다.\n- 진단: 퇴행성 관절염이 의심되며, X-ray 촬영을 통해 정확한 진단이 필요합니다.\n- 치료: X-ray 결과에 따라 관절 내 주사 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 슬관절의 압통이 있으며, 관절음이 동반됩니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
+        noShow: false,
+        appointmentDate: "2025-06-12",
+        appointmentTime: "14:00",
+        reminderCount: 1,
+        lastReminderReceived: true,
+    },
+    {
+        appointmentId: 7,
+        patientId: 7,
+        patientName: "윤서연",
+        memo: "외측 인대 손상 의심. 초음파 검사 필요. 통증 부위: 좌측 발목 외측, 부종 동반. VAS 5-6/10. 신체검사에서 좌측 발목 외측 압통, 전방 전위 검사 양성.",
+        script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 왼쪽 발목이 너무 아파서 걷기가 힘들어요 얼마나 아프신가요? 10점 만점에 5-6점 정도요 일상생활에 지장이 있으신가요? 네 걷기가 힘들고 발목이 부어있어요 언제부터 아프셨나요? 2주일 전에 농구하다가 발목을 접질렸어요 갑자기 시작됐나요? 네 농구하다가 갑자기 발목을 접질렸어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 초음파 검사를 해보니 외측 인대 손상이 의심됩니다. 초음파 검사를 통해 정확한 진단을 내릴 예정입니다.",
+        summary:
+            "- 증상: 좌측 발목 통증으로 인해 활동에 제한이 있으며, 특히 부종이 동반됩니다. VAS 5-6/10 정도의 통증이 있으며, 보행 시 7-8/10까지 증가합니다.\n- 진단: 외측 인대 손상이 의심되며, 초음파 검사를 통해 정확한 진단이 필요합니다.\n- 치료: 초음파 결과에 따라 보조기 착용 및 물리치료를 고려할 예정입니다.\n- 특이사항: 좌측 발목 외측의 압통이 있으며, 전방 전위 검사가 양성입니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
+        noShow: false,
+        appointmentDate: "2025-06-12",
+        appointmentTime: "15:00",
+        reminderCount: 1,
+        lastReminderReceived: true,
+    },
+    {
+        appointmentId: 8,
+        patientId: 8,
+        patientName: "한지훈",
+        memo: "수근관 증후군 의심. 신경전도 검사 필요. 통증 부위: 우측 손목, 야간통 동반. VAS 6-7/10. 신체검사에서 우측 Phalen test 양성, Tinel sign 양성.",
+        script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 오른쪽 손목이 너무 아파서 물건을 잡기가 힘들어요 얼마나 아프신가요? 10점 만점에 6-7점 정도요 일상생활에 지장이 있으신가요? 네 물건을 잡기가 힘들고 손가락이 저려요 언제부터 아프셨나요? 1달 전부터 시작됐어요 갑자기 시작됐나요? 네 처음에는 그냥 조금 불편한 정도였는데 점점 심해졌어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 신경전도 검사를 해보니 수근관 증후군이 의심됩니다. 신경전도 검사를 통해 정확한 진단을 내릴 예정입니다.",
+        summary:
+            "- 증상: 우측 손목 통증으로 인해 활동에 제한이 있으며, 특히 야간통이 심합니다. VAS 6-7/10 정도의 통증이 있으며, 물건을 잡을 때 8-9/10까지 증가합니다.\n- 진단: 수근관 증후군이 의심되며, 신경전도 검사를 통해 정확한 진단이 필요합니다.\n- 치료: 신경전도 검사 결과에 따라 수근관 주사 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 Phalen test와 Tinel sign이 양성이며, 야간통을 동반합니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
+        noShow: false,
+        appointmentDate: "2025-06-12",
+        appointmentTime: "16:00",
+        reminderCount: 1,
+        lastReminderReceived: true,
+    },
+    {
+        appointmentId: 9,
+        patientId: 9,
+        patientName: "송미나",
+        memo: "오십견 의심. 초음파 검사 필요. 통증 부위: 좌측 견관절, 야간통 동반. VAS 7-8/10. 신체검사에서 좌측 견관절 외전 제한, 내회전 제한.",
+        script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 왼쪽 어깨가 너무 아파서 팔을 들 수가 없어요 얼마나 아프신가요? 10점 만점에 7-8점 정도요 일상생활에 지장이 있으신가요? 네 팔을 들 수가 없고 야간에 통증이 심해요 언제부터 아프셨나요? 1달 전부터 시작됐어요 갑자기 시작됐나요? 네 처음에는 그냥 조금 불편한 정도였는데 점점 심해졌어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 초음파 검사를 해보니 오십견이 의심됩니다. 초음파 검사를 통해 정확한 진단을 내릴 예정입니다.",
+        summary:
+            "- 증상: 좌측 견관절 통증으로 인해 활동에 제한이 있으며, 특히 야간통이 심합니다. VAS 7-8/10 정도의 통증이 있으며, 상지 거상 시 9-10/10까지 증가합니다.\n- 진단: 오십견이 의심되며, 초음파 검사를 통해 정확한 진단이 필요합니다.\n- 치료: 초음파 결과에 따라 관절 내 주사 및 물리치료를 고려할 예정입니다.\n- 특이사항: 좌측 견관절의 외전 및 내회전 제한이 있으며, 야간통을 동반합니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
+        noShow: false,
+        appointmentDate: "2025-06-12",
+        appointmentTime: "17:00",
+        reminderCount: 1,
+        lastReminderReceived: true,
+    },
+    {
+        appointmentId: 10,
+        patientId: 10,
+        patientName: "임재현",
+        memo: "족부 건막염 의심. X-ray 촬영 필요. 통증 부위: 우측 제1족지, 부종 동반. VAS 6-7/10. 신체검사에서 우측 제1족지 압통, 신전 시 통증 악화.",
+        script: "안녕하세요 어서오세요 네 안녕하세요 어디가 불편하신가요? 네 오른쪽 발가락이 너무 아파서 걷기가 힘들어요 얼마나 아프신가요? 10점 만점에 6-7점 정도요 일상생활에 지장이 있으신가요? 네 걷기가 힘들고 발가락이 부어있어요 언제부터 아프셨나요? 2주일 전부터 시작됐어요 갑자기 시작됐나요? 네 처음에는 그냥 조금 불편한 정도였는데 점점 심해졌어요 이전에 비슷한 증상이 있었나요? 아니요 처음이에요 X-ray를 찍어보니 족부 건막염이 의심됩니다. X-ray 촬영을 통해 정확한 진단을 내릴 예정입니다.",
+        summary:
+            "- 증상: 우측 제1족지 통증으로 인해 활동에 제한이 있으며, 특히 부종이 동반됩니다. VAS 6-7/10 정도의 통증이 있으며, 보행 시 8-9/10까지 증가합니다.\n- 진단: 족부 건막염이 의심되며, X-ray 촬영을 통해 정확한 진단이 필요합니다.\n- 치료: X-ray 결과에 따라 보조기 착용 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 제1족지의 압통이 있으며, 신전 시 통증이 악화됩니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
+        noShow: false,
+        appointmentDate: "2025-06-12",
+        appointmentTime: "18:00",
+        reminderCount: 1,
+        lastReminderReceived: true,
+    },
 ]
 
 function AppointmentTable({ appointments }: { appointments: typeof mockAppointments }) {
@@ -73,6 +184,26 @@ function AppointmentTable({ appointments }: { appointments: typeof mockAppointme
         (typeof mockAppointments)[0] | null
     >(null)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [appointmentList, setAppointmentList] = useState(appointments)
+    const [riskValues, setRiskValues] = useState<Record<number, number>>(() => {
+        // 초기 위험도 값 설정
+        const initialRisks: Record<number, number> = {}
+        appointments.forEach((appointment) => {
+            const random = Math.random()
+            let risk: number
+
+            if (random < 0.8) {
+                risk = Math.floor(Math.random() * 20) + 10 // 10-30%
+            } else if (random < 0.95) {
+                risk = Math.floor(Math.random() * 39) + 31 // 31-69%
+            } else {
+                risk = Math.floor(Math.random() * 31) + 70 // 70-100%
+            }
+
+            initialRisks[appointment.appointmentId] = risk
+        })
+        return initialRisks
+    })
 
     const getStatusBadge = (appointment: (typeof mockAppointments)[0]) => {
         if (appointment.noShow) {
@@ -90,8 +221,7 @@ function AppointmentTable({ appointments }: { appointments: typeof mockAppointme
     }
 
     const getNoShowRisk = (appointment: (typeof mockAppointments)[0]) => {
-        // 실제로는 이전 예약 기록 등을 기반으로 계산
-        const risk = Math.random() * 100
+        const risk = riskValues[appointment.appointmentId]
         return {
             value: risk,
             level: risk > 70 ? "high" : risk > 40 ? "medium" : "low",
@@ -99,6 +229,24 @@ function AppointmentTable({ appointments }: { appointments: typeof mockAppointme
     }
 
     const handleReminder = (appointment: (typeof mockAppointments)[0]) => {
+        // 리마인더 발송 시 해당 환자의 위험도 감소
+        setRiskValues((prev) => ({
+            ...prev,
+            [appointment.appointmentId]: Math.max(10, prev[appointment.appointmentId] - 15), // 최소 10%까지 감소
+        }))
+
+        // 리마인더 카운트 증가 및 수신 상태 변경
+        setAppointmentList((prevList) =>
+            prevList.map((item) =>
+                item.appointmentId === appointment.appointmentId
+                    ? {
+                          ...item,
+                          reminderCount: item.reminderCount + 1,
+                          lastReminderReceived: false,
+                      }
+                    : item
+            )
+        )
         toast.success("맞춤 리마인더를 발송 완료했습니다")
     }
 
@@ -120,7 +268,7 @@ function AppointmentTable({ appointments }: { appointments: typeof mockAppointme
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {appointments.map((appointment) => {
+                {appointmentList.map((appointment) => {
                     const risk = getNoShowRisk(appointment)
                     return (
                         <TableRow key={appointment.appointmentId}>

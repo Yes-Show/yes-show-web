@@ -1,7 +1,20 @@
+"use client"
+
 import { PatientType } from "@/types/patientType"
+import { Card } from "@/components/ui/card"
+import { Table } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { format } from "date-fns"
+import { ko } from "date-fns/locale"
+
+// PatientType을 확장한 타입 정의
+type PatientWithSymptoms = PatientType & {
+    mainSymptoms: string
+}
 
 // 더미 데이터
-const dummyPatients: PatientType[] = Array.from({ length: 20 }, (_, index) => ({
+const dummyPatients: PatientWithSymptoms[] = Array.from({ length: 20 }, (_, index) => ({
     patientId: index + 1,
     name: `환자${index + 1}`,
     gender: index % 2,
@@ -13,60 +26,103 @@ const dummyPatients: PatientType[] = Array.from({ length: 20 }, (_, index) => ({
     emergencyPhone: `010-${String(index + 1000).padStart(4, "0")}-${String(index).padStart(4, "0")}`,
     bloodType: ["A", "B", "O", "AB"][index % 4],
     createdAt: new Date(2024, index % 12, (index % 28) + 1).toISOString(),
+    mainSymptoms: [
+        "요추 추간판 탈출증",
+        "척추관 협착증",
+        "오십견",
+        "퇴행성 관절염",
+        "만성 요통",
+        "척추 측만증",
+        "근육 경련",
+        "신경통",
+        "수술 후 통증",
+        "암성 통증",
+        "근막 통증 증후군",
+        "섬유근육통",
+    ][index % 12],
 }))
 
 export function PatientList() {
-    // createdAt 기준으로 정렬
-    const sortedPatients = [...dummyPatients].sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-
     return (
-        <div className="p-6">
-            <div className="rounded-lg border bg-white shadow-sm">
-                <div className="p-6">
-                    <h2 className="text-lg font-semibold mb-4">최근 내원 환자 목록</h2>
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead>
-                                <tr className="border-b">
-                                    <th className="text-left p-3 font-medium text-gray-500">ID</th>
-                                    <th className="text-left p-3 font-medium text-gray-500">
-                                        이름
-                                    </th>
-                                    <th className="text-left p-3 font-medium text-gray-500">
-                                        성별
-                                    </th>
-                                    <th className="text-left p-3 font-medium text-gray-500">
-                                        생년월일
-                                    </th>
-                                    <th className="text-left p-3 font-medium text-gray-500">
-                                        첫 내원일
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sortedPatients.map((patient) => (
-                                    <tr
-                                        key={patient.patientId}
-                                        className="border-b hover:bg-gray-50"
-                                    >
-                                        <td className="p-3">{patient.patientId}</td>
-                                        <td className="p-3">{patient.name}</td>
-                                        <td className="p-3">
-                                            {patient.gender === 0 ? "남성" : "여성"}
-                                        </td>
-                                        <td className="p-3">{patient.birthday}</td>
-                                        <td className="p-3">
-                                            {new Date(patient.createdAt).toLocaleDateString()}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <Card className="p-6">
+            <div className="overflow-x-auto">
+                <Table>
+                    <thead>
+                        <tr className="border-b">
+                            <th className="text-left py-3 px-4">환자 정보</th>
+                            <th className="text-left py-3 px-4">주요 증상</th>
+                            <th className="text-left py-3 px-4">연락처</th>
+                            <th className="text-left py-3 px-4">주소</th>
+                            <th className="text-left py-3 px-4">혈액형</th>
+                            <th className="text-left py-3 px-4">최초 방문일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {dummyPatients.map((patient) => (
+                            <tr key={patient.patientId} className="border-b hover:bg-gray-50">
+                                <td className="py-4 px-4">
+                                    <div className="flex items-center gap-3">
+                                        <Avatar>
+                                            <AvatarFallback>
+                                                {getInitials(patient.name)}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <div className="font-medium">{patient.name}</div>
+                                            <div className="text-sm text-gray-500">
+                                                ID: {patient.patientId} |{" "}
+                                                {calculateAge(patient.birthday)}세 |{" "}
+                                                {patient.gender === 0 ? "남성" : "여성"}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="py-4 px-4">
+                                    <Badge variant="secondary" className="text-sm">
+                                        {patient.mainSymptoms}
+                                    </Badge>
+                                </td>
+                                <td className="py-4 px-4">
+                                    <div className="text-sm">
+                                        <div>{patient.phone}</div>
+                                        <div className="text-gray-500">{patient.email}</div>
+                                    </div>
+                                </td>
+                                <td className="py-4 px-4">
+                                    <div className="text-sm">{patient.neighbourhood}</div>
+                                </td>
+                                <td className="py-4 px-4">
+                                    <Badge variant="outline">{patient.bloodType}형</Badge>
+                                </td>
+                                <td className="py-4 px-4">
+                                    <div className="text-sm">
+                                        {format(new Date(patient.createdAt), "yyyy년 MM월 dd일", {
+                                            locale: ko,
+                                        })}
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
             </div>
-        </div>
+        </Card>
     )
+}
+
+function getInitials(name: string) {
+    return name.slice(0, 2)
+}
+
+function calculateAge(birthday: string) {
+    const birthDate = new Date(birthday)
+    const today = new Date()
+    let age = today.getFullYear() - birthDate.getFullYear()
+    const monthDiff = today.getMonth() - birthDate.getMonth()
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--
+    }
+
+    return age
 }
