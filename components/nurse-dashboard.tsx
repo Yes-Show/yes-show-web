@@ -74,7 +74,7 @@ const mockAppointments: (AppointmentType & {
         summary:
             "- 증상: 허리 통증으로 인해 활동에 제한이 있으며, 특히 오른쪽 다리로 방사되는 통증이 심합니다. VAS 6-7/10 정도의 통증이 있으며, 움직임 시 8-9/10까지 증가합니다.\n- 진단: 요추 추간판 탈출증이 의심되며, MRI 촬영을 통해 정확한 진단이 필요합니다.\n- 치료: MRI 결과에 따라 신경차단술 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 SLR test가 양성이며, 신경학적 검사에서 이상 소견이 있습니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
         noShow: false,
-        appointmentDate: "2025-06-12",
+        appointmentDate: "2025-06-14",
         appointmentTime: "09:00",
         reminderCount: 1,
         lastReminderReceived: true,
@@ -88,7 +88,7 @@ const mockAppointments: (AppointmentType & {
         summary:
             "- 증상: 경부 통증으로 인해 활동에 제한이 있으며, 특히 우측 상지로 방사되는 통증이 심합니다. VAS 5-6/10 정도의 통증이 있으며, 경부 회전 시 7-8/10까지 증가합니다.\n- 진단: 경추 추간판 탈출증이 의심되며, 경추 MRI 촬영을 통해 정확한 진단이 필요합니다.\n- 치료: MRI 결과에 따라 신경차단술 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 Spurling test가 양성이며, 신경학적 검사에서 이상 소견이 있습니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
         noShow: false,
-        appointmentDate: "2025-06-12",
+        appointmentDate: "2025-06-14",
         appointmentTime: "10:00",
         reminderCount: 1,
         lastReminderReceived: true,
@@ -102,7 +102,7 @@ const mockAppointments: (AppointmentType & {
         summary:
             "- 증상: 우측 견관절 통증으로 인해 활동에 제한이 있으며, 특히 야간통이 심합니다. VAS 7-8/10 정도의 통증이 있으며, 상지 거상 시 9-10/10까지 증가합니다.\n- 진단: 오십견이 의심되며, 초음파 검사를 통해 정확한 진단이 필요합니다.\n- 치료: 초음파 결과에 따라 관절 내 주사 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 견관절의 외전 및 내회전 제한이 있으며, 야간통을 동반합니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
         noShow: false,
-        appointmentDate: "2025-06-12",
+        appointmentDate: "2025-06-14",
         appointmentTime: "11:00",
         reminderCount: 1,
         lastReminderReceived: true,
@@ -116,7 +116,7 @@ const mockAppointments: (AppointmentType & {
         summary:
             "- 증상: 우측 슬관절 통증으로 인해 활동에 제한이 있으며, 특히 계단 보행 시 통증이 악화됩니다. VAS 6-7/10 정도의 통증이 있으며, 계단 보행 시 8-9/10까지 증가합니다.\n- 진단: 퇴행성 관절염이 의심되며, X-ray 촬영을 통해 정확한 진단이 필요합니다.\n- 치료: X-ray 결과에 따라 관절 내 주사 및 물리치료를 고려할 예정입니다.\n- 특이사항: 우측 슬관절의 압통이 있으며, 관절음이 동반됩니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
         noShow: false,
-        appointmentDate: "2025-06-12",
+        appointmentDate: "2025-06-14",
         appointmentTime: "14:00",
         reminderCount: 1,
         lastReminderReceived: true,
@@ -130,7 +130,7 @@ const mockAppointments: (AppointmentType & {
         summary:
             "- 증상: 좌측 발목 통증으로 인해 활동에 제한이 있으며, 특히 부종이 동반됩니다. VAS 5-6/10 정도의 통증이 있으며, 보행 시 7-8/10까지 증가합니다.\n- 진단: 외측 인대 손상이 의심되며, 초음파 검사를 통해 정확한 진단이 필요합니다.\n- 치료: 초음파 결과에 따라 보조기 착용 및 물리치료를 고려할 예정입니다.\n- 특이사항: 좌측 발목 외측의 압통이 있으며, 전방 전위 검사가 양성입니다.\n- 환자 반응: 환자는 통증 완화를 위해 적극적인 치료를 원하고 있습니다.",
         noShow: false,
-        appointmentDate: "2025-06-12",
+        appointmentDate: "2025-06-14",
         appointmentTime: "15:00",
         reminderCount: 1,
         lastReminderReceived: true,
